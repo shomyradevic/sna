@@ -1,0 +1,16 @@
+{% extends 'posts/base_template.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<p class="account-heading">{{ view.user }}</p>
+<a href="{{ view.user.profile.image.url }}">
+    <img class="profile-picture" src="{{ view.user.profile.image.url }}" alt="***{{ view.user }}'s profile picture***"/>
+</a><br><br>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ user_update_form|crispy }}
+    {{ profile_update_form|crispy }}
+    <button class="btn btn-outline-info" type="submit">Save</button>
+    <a class="btn btn-secondary" href="{% url 'profile-detail' view.pk %}">Cancel</a><br><br><br>
+</form>
+{% endblock %}

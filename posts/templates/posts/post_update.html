@@ -1,0 +1,10 @@
+{% extends 'posts/show.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-outline-info">Save</button>
+    <a href="{% url 'homepage' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock content%}

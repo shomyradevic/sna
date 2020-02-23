@@ -1,0 +1,12 @@
+{% extends 'posts/base_template.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    {%comment%}ako ne stavimo enctype, request.FILES ce biti prazan{%endcomment%}
+    {% csrf_token %}
+    {{ image_form|crispy }}
+    <button class="btn btn-outline-info" type="submit">Submit</button>
+    <a class="btn btn-secondary" href="{% url 'homepage' %}">Back to homepage</a>
+</form>
+{% endblock %}

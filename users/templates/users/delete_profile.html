@@ -1,0 +1,9 @@
+{% extends 'posts/base_template.html' %}
+{% block content %}
+<p class="medium">Do you really want to delete your account?</p>
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">Delete</button>
+    <a class="btn btn-secondary" href="{% url 'profile-detail' view.kwargs.pk %}">Cancel</a>
+</form>
+{% endblock %}

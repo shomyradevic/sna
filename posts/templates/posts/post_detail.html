@@ -1,0 +1,32 @@
+{% extends 'posts/show.html' %}
+{% block content %}
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+        <a href="{% url 'profile-detail' object.author.pk %}">
+            <img class="homepage-profile-picture" src="{{ object.author.profile.image.url }}" alt="*user_profile_pic*"/>
+        </a>
+          <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ post.author }}</a>
+            <small class="text-muted">{{ object.created_time }}</small>
+            {% if user == post.author %}
+                <select onchange="change(this.value, {{ post.id }});">
+                    <option value="Action" selected>action</option>
+                    <option value="Edit">Edit</option>
+                    <option value="Delete">Delete</option>
+                </select>
+                <div id="div-{{ post.id }}"></div>
+            {% endif %}
+    </div>
+      {% if object.image %}
+          <a href="{{ object.image.url }}" target="_blank">
+              <img class="homepage" src="{{ object.image.url }}" alt="Post-image"/>
+          </a>
+      {% elif object.content %}
+        <p class="article-content">{{ object.content }}</p>
+      {% endif %}
+      <br><br>
+      <small id="like-{{ post.pk }}">Likes: {{ object.likes.count }}</small>
+      <button class="like" id="{{ post.pk }}" onclick="ajax_like(this.id);">Like</button>
+  </div>
+</article>
+{% endblock %}

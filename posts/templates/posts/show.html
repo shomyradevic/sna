@@ -1,0 +1,168 @@
+{% extends 'posts/base_template.html' %}
+{% block javascript %}
+<script>
+function change(value, id){
+    if(value == 'Delete'){
+        butt = "<button class='btn' style='background-color:#cf1f00; margin-top:2px;' onclick='delete_post(" + id + ");'>Delete</button>"
+        console.log(butt);
+        document.getElementById("div-" + id).innerHTML = butt;
+    }else if(value == 'Edit'){
+        butt = "<button class='btn' style='background-color:orange; color:black; margin-top:2px;' onclick='edit_post(" + id + ");'>Edit</button>"
+        console.log(butt);
+        document.getElementById("div-" + id).innerHTML = butt;
+    }else
+        document.getElementById("div-" + id).innerHTML = "";
+};
+
+
+function edit_post(id){
+    var address = "{% url 'post-edit' pk=12345 %}".replace(/12345/, id.toString());
+    window.location.href = address;
+};
+
+function delete_post(id){
+    if(confirm("Are you sure you want to delete this post?") == true){
+        var address = "{% url 'post-delete' pk=12345 %}".replace(/12345/, id.toString());
+        $.ajax({
+            type: "GET",
+            url: address,
+            success: function(response){
+                alert(response.status);
+                window.location.href = "{% url 'homepage' %}";
+            },
+            error: function(request, ajaxOptions, thrownError)
+            {
+                console.log(request.responseText);
+            }
+        });
+    }
+};
+
+function ajax_like(value){
+    $.ajax({
+        type: 'GET',
+        data: {'post_id': value},
+        dataType: "JSON",
+        url: "{% url 'like' %}",
+        success: function(response){
+            if(!response.error)
+                $("#like-" + value).html("Likes: " + response.likes);
+            else if(response.error == 'Already liked!' || response.error == 'You are not logged in!'){
+                $("#" + value).remove();
+                $("#like-" + value).html($("#like-" + value).text() + " " + response.error);
+            }
+            else
+                $("#like-" + value).html(response.error);
+        },
+        error: function (jqXHR, exception) {
+            var msg = '';
+            if (jqXHR.status === 0) {
+                msg = 'Not connected. Verify Network.';
+            } else if (jqXHR.status == 404) {
+                msg = 'Requested page not found. [404]';
+            } else if (jqXHR.status == 500) {
+                msg = 'Internal Server Error [500].';
+            } else if (exception === 'timeout') {
+                msg = 'Time out error.';
+            }
+            console.log(msg);
+        },
+    });
+};
+
+function search_event(){
+    q = document.querySelector("#q").value;
+    if(q.length){
+         $.ajax({
+            type: 'GET',
+            data: {'q': q},
+            dataType: 'JSON',
+            url: '',
+            success: function(response){
+                var temp_ul_content = "";
+                var final_ul_content = "<p class='search-results'>";
+                for(i=0;i<response.status.length;i++){
+                    var address = "{% url 'post-detail' pk=12345 %}".replace(/12345/, response.status[i]['pk'].toString());
+                    temp_ul_content += "<i><li><a href=\"" + address + "\">";
+                    temp_ul_content += response.status[i]['content'];
+                    temp_ul_content += "</a></li></i>";
+                }
+                if(temp_ul_content.length > 2){
+                   final_ul_content += "Did you mean:</p>" + temp_ul_content + "<br>";
+                }else
+                   final_ul_content += "No results.</p>";
+                $("#search-results").html(final_ul_content);
+            },
+            error: function(request, ajaxOptions, thrownError){
+                console.log("Error: " + request.responseText);
+            }
+        });
+    }else
+        $("#search-results").html("");
+};
+
+
+function increase_height(id){
+    $("#" + id).attr("placeholder", " ");
+};
+
+
+</script>
+
+{% endblock javascript %}
+
+
+{% block show %}
+    {% for post in posts %}
+    <article class="media content-section">
+      <div class="media-body">
+        <div class="article-metadata">
+            <a href="{% url 'profile-detail' post.author.pk %}">
+                <img class="homepage-profile-picture" src="{{ post.author.profile.image.url }}" alt="*user_profile_pic*"/>
+            </a>
+              <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+                <small class="text-muted">{{ post.created_time }}</small>
+                {% if user == post.author %}
+                    <select onchange="change(this.value, {{ post.id }});">
+                        <option value="Action" selected>action</option>
+                        <option value="Edit">Edit</option>
+                        <option value="Delete">Delete</option>
+                    </select>
+                    <div id="div-{{ post.id }}"></div>
+                {% endif %}
+        </div>
+          {% if post.image %}
+              <a href="{{ post.image.url }}" target="_blank">
+                  <img class="borders" src="{{ post.image.url }}" alt="Post-image"/>
+              </a>
+          {% elif post.content %}
+            <p class="article-content">{{ post.content }}</p>
+          {% endif %}
+          <br><br>
+          <small id="like-{{ post.pk }}">Likes: {{ post.likes.count }}</small>
+          <button class="like" id="{{ post.pk }}" onclick="ajax_like(this.id);">Like</button>
+      </div>
+    </article>
+    {% endfor %}
+
+    {% if posts.paginator.num_pages > 1 %}
+        {% if posts.has_previous %}
+          <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+          <a class="btn btn-outline-info mb-4" href="?page={{ posts.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in posts.paginator.page_range %}
+          {% if posts.number == num %}
+            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+          {% else %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if posts.has_next %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ posts.next_page_number }}">Next</a>
+          <a class="btn btn-outline-info mb-4" href="?page={{ posts.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock show %}

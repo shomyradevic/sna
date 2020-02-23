@@ -1,0 +1,23 @@
+{% extends 'posts/show.html' %}
+
+{% block search-bar %}
+    <input class="search" type="search" id="q" placeholder="Search text posts..." onkeyup="search_event();"/>
+{% endblock search-bar %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p class="medium">Post some text!</p>
+        <form method="POST" id="post_form">
+            {% csrf_token %}
+            <textarea class="form-control z-depth-1" id="txt" rows="1" style="width: 75%;" placeholder="Your text..."></textarea>
+            <button type='button' class='btn btn-outline-info' onclick="send_text_content();">Post Text</button>
+            <a class='btn btn-secondary' href="{% url 'image-create' %}" style="float:right;">Post Image?</a>
+            <div id="action-div"></div>
+            <br>
+        </form>
+    <hr/>
+    {% else %}
+        <p class="medium" style="padding: 10px;">You must be logged in to create a post...</p>
+    {% endif %}
+<br>
+{% endblock content %}

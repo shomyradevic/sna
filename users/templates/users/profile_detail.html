@@ -1,0 +1,19 @@
+{% extends 'posts/base_template.html' %}
+{% block content %}
+
+<center><p class="account-heading">Account information</p></center>
+{% if user.pk == object.pk %}
+    <a class="btn btn-outline-info" href="{% url 'profile-update' object.pk %}">Update Account</a>
+    <a class="btn btn-danger" href="{% url 'profile-delete' object.pk %}" style="float: right;">Delete Account</a>
+{% endif %}
+<hr>
+<small class="medium">
+    {{ object.user.username }}
+    {% if object.user.is_staff %}(Admin){% endif %}
+</small>
+<small style="float: right; font-size: 10pt;">member since: {{ object.user.date_joined|date:"M d, Y" }}</small>
+
+
+<img class="profile-picture-detail" src="{{ object.image.url }}" alt="Profile_image"/><hr/>
+
+{% endblock content %}

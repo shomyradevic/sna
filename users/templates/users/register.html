@@ -1,0 +1,16 @@
+{% extends 'posts/base_template.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section">
+    <h3>Welcome to Social Network!</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ reg_form|crispy }}
+        <button class="btn btn-outline-info" type="submit">Register</button>
+        <a class="btn btn-secondary" href="{% url 'homepage' %}">Cancel</a>
+        <small class="account-message"><a href="{% url 'login' %}" style="float: right;">Already have an account?</a></small>
+    </form>
+</div>
+{% endblock %}
+
+

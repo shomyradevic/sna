@@ -1,0 +1,31 @@
+{% extends 'posts/show.html' %}
+{% block content %}
+    <p class="medium">
+        Posts by {{ view.kwargs.username }}
+    </p>
+{% endblock content %}
+
+
+{% block user_posts_block %}
+
+    {% if page_obj.paginator.num_pages > 1 %}
+        {% if page_obj.has_previous %} {% comment %}Because of the CBV{% endcomment %}
+          <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+          <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+          {% else %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+          <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock user_posts_block %}
