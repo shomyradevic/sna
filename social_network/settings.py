@@ -13,9 +13,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import json
 
-with open('/etc/config.json', 'r') as f:
-    file  = json.load(f)
-    f.close()
+file = {'secret_key': '5c78dsa'}
+#with open('/etc/config.json', 'r') as f:
+    #file = json.load(f)
+    #f.close()
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -30,14 +31,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = file['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['www.snanetwork.rs', 'snanetwork.rs', '94.127.4.217']
+ALLOWED_HOSTS = ['www.snanetwork.rs', 'snanetwork.rs', '94.127.4.217', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
     'crispy_forms',
     'posts.apps.PostsConfig',
     'users.apps.UsersConfig',
@@ -132,4 +134,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = 'login'
-

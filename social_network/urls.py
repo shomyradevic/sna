@@ -25,15 +25,32 @@ from users.views import (
     ProfileDetailView,
     AccountDeleteView,
 )
+from rest_framework.routers import DefaultRouter
+from posts.views import PostViewSet
+from users.views import CustomUserViewSet, ProfileViewSet
+
+router = DefaultRouter()
+router.register('users', CustomUserViewSet)
+router.register('posts', PostViewSet)
+router.register('profiles', ProfileViewSet)
+
+user_detail = CustomUserViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
 
 urlpatterns = [
+    path('', include('posts.urls')),
     path('profile/<int:pk>/update', profile_update_view, name='profile-update'),
     path('profile/<int:pk>/delete', AccountDeleteView.as_view(template_name='users/delete_profile.html'), name='profile-delete'),
     path('profile/<int:pk>/', ProfileDetailView.as_view(), name='profile-detail'),
+    path('api/', include(router.urls)),
+    path('api/users/<int:pk>/', user_detail, name='user-detail'),
     path('logout/', logout_view, name='logout'),
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
-    path('', include('posts.urls')),
     path('admin/', admin.site.urls)
 ]
 

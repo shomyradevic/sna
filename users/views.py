@@ -5,11 +5,13 @@ from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.decorators import login_required
 from .forms import UpdateProfileForm, UserEditForm
-from .models import Profile
+from .models import Profile, CustomUser
 from django.views.generic import DetailView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from users.forms import UserRegisterForm
+from .serializers import CustomUserSerializer, ProfileSerializer
+from rest_framework.viewsets import ModelViewSet
 
 
 def register_view(request):
@@ -41,11 +43,11 @@ def login_view(request):
 
 
 def logout_view(request):
-    if str(request.user) == 'AnonymousUser':
-        info(request=request, message='You cannot logout because You are not logged in!')
-    else:
+    if request.user.is_authenticated:
         logout(request=request)
         info(request=request, message='You are now logged out.')
+    else:
+        info(request=request, message='You cannot logout because You are not logged in!')
     return render(request=request, template_name='users/logout.html')
 
 
@@ -103,3 +105,15 @@ class AccountDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.user == self.request.user:
             return True
         return False
+
+
+class CustomUserViewSet(ModelViewSet):
+    serializer_class = CustomUserSerializer
+    queryset = CustomUser.objects.all()
+    # permission line if need
+
+
+class ProfileViewSet(ModelViewSet):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+    # permission line if need

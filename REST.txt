@@ -1,0 +1,53 @@
+Deploy:
+
+Apache mod_wsgi specific configuration
+Note that if deploying to Apache using mod_wsgi, the authorization header is not passed through to a WSGI application by default, as it is assumed that authentication will be handled by Apache, rather than at an application level.
+
+If you are deploying to Apache, and using any non-session based authentication, you will need to explicitly configure mod_wsgi to pass the required headers through to the application. This can be done by specifying the WSGIPassAuthorization directive in the appropriate context and setting it to 'On'.
+
+
+
+# this can go in either server config, virtual host, directory or .htaccess
+WSGIPassAuthorization On
+
+
+Model relationship:
+
+ForeignKey - One to many rel. (1:M)
+OneToOne - 1:1 (unique)
+ManyToMany - M:M
+
+
+IMPORTANT:
+If one CBV/FBV is being overrided by django-rest-framework view, 
+put the path() variable for DefaultRouter() on top of the urlpatterns list.
+IN THE URLPATTERNS, list element behave with overriding. For two same paths, bottom one will override upper one.
+
+We should use JWT for authentication for snanetwork.rs
+We should change AJAX methods in posts/show.html, mostly everything is GET :(.
+We should watch 1 hour yt video for django rest framework!
+
+
+API-ENDPOINTS:
+    *If we want to delete specific account, deleting the user will trigger profile-deleting (checked)*
+    *When we delete specific user, it may take some time to refresh database.*
+
+    -snanetwork.rs/api/ [GET]
+	-snanetwork.rs/api/posts/ [GET, POST(login_required)]
+	-snanetwork.rs/api/posts/<id>/ [GET, PUT(login_required, IsAdminOrSelf), DELETE(login_required, IsAdminOrSelf)]
+	-snanetwork.rs/api/users/ [GET, POST]
+	-snanetwork.rs/api/users/<id>/ [GET, PUT(login_required, IsAdminOrSelf), DELETE(login_required, IsAdminOrSelf)]
+	-snanetwork.rs/api/profiles/ [GET]
+	-snanetwork.rs/api/profiles/<id>/ [GET, PUT(login_required, IsAdminOrSelf)]
+
+
+SCHEMA:
+        POST <- USER -> PROFILE
+
+
+We have modified:
+-settings.py(ALLOWED_HOSTS, DEBUG, Config.json, INSTALLED_APPS)
+-posts/views.py(like(), removed variable new_like_number)
+-users/serializers.py posts/serializers.py, users/views.py, posts/views.py
+-social_network/urls.py
+-users/views.py(changed logout_view()(removed "AnonymousUser" validation and added .is_authenticated checking, which works.))

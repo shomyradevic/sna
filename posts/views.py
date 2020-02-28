@@ -9,6 +9,8 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
 from os import remove
+from rest_framework.viewsets import ModelViewSet
+from .serializers import PostSerializer
 
 
 class PostDetailView(DetailView):
@@ -115,12 +117,12 @@ def delete_view(request, pk: int):
         response['status'] = 'Post successfully deleted!'
         return JsonResponse(data=response)
     else:
-        response['status'] = 'Post has not been deleted.!'
+        response['status'] = 'Post has not been deleted!'
         return JsonResponse(data=response)
 
 
 def like(request):
-    new_like_number, response = 404, {'likes': '', 'error': ''}
+    response = {'likes': '', 'error': ''}
     identifier = request.GET.get('post_id')
     user = request.user
     if user.is_authenticated:
@@ -137,3 +139,9 @@ def like(request):
             return JsonResponse(data=response)
     response['error'] = 'You are not logged in!'
     return JsonResponse(data=response)
+
+
+class PostViewSet(ModelViewSet):
+    serializer_class = PostSerializer
+    queryset = Post.objects.all()
+    # Permission line if needed

@@ -4,9 +4,7 @@ from django.contrib.auth import get_user_model
 from .models import Profile
 from posts.models import Post
 
-"""
-Mali signali
-"""
+
 User = get_user_model()
 
 
