@@ -1,0 +1,29 @@
+repo: https://github.com/shomyradevic/social_network.git
+
+Upload:
+
+git init
+git remote add origin [gitLink]
+git remote -v
+git add .
+git commit -m "First commit"
+git push origin master    -> ako nece probaj: git push origin master --force
+
+Download:
+
+git clone [gitLink] ( u trenutnom folderu kreira repo sa github-a)
+
+vim exit: :q ili :q! (sa '!' je valjda sa save-ovanjem)
+
+
+IN CASE OF ERROR: "Your local changes to the following files would be overwritten by merge: path/to/file"
+
+Run:
+git reset path/to/file
+git checkout path/to/file
+
+
+
+
+COPY GIT REPO:
+git clone https://github.com/git/repo.git

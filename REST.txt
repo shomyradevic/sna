@@ -1,3 +1,7 @@
+Why should we build a REST-APi for our app?
+    -For third-party clients/apps. If we are building mobile app for example, we will need to
+    Create/Retrieve/Update or Delete some entities from our database. REST API is a good solution.
+
 Deploy:
 
 Apache mod_wsgi specific configuration
