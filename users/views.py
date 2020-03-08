@@ -10,7 +10,6 @@ from django.views.generic import DetailView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from users.forms import UserRegisterForm
-from .serializers import CustomUserSerializer, ProfileSerializer
 from rest_framework.viewsets import ModelViewSet
 
 
@@ -105,15 +104,3 @@ class AccountDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.user == self.request.user:
             return True
         return False
-
-
-class CustomUserViewSet(ModelViewSet):
-    serializer_class = CustomUserSerializer
-    queryset = CustomUser.objects.all()
-    # permission line if need
-
-
-class ProfileViewSet(ModelViewSet):
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
-    # permission line if need

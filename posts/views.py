@@ -10,7 +10,6 @@ from django.core.paginator import Paginator
 from django.contrib.auth import get_user_model
 from os import remove
 from rest_framework.viewsets import ModelViewSet
-from .serializers import PostSerializer
 
 
 class PostDetailView(DetailView):
@@ -139,9 +138,3 @@ def like(request):
             return JsonResponse(data=response)
     response['error'] = 'You are not logged in!'
     return JsonResponse(data=response)
-
-
-class PostViewSet(ModelViewSet):
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-    # Permission line if needed

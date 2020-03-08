@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.shortcuts import reverse
 from django.core.validators import MinLengthValidator
+from rest_framework.reverse import reverse as api_reverse
 
 
 class CustomUser(AbstractUser):
@@ -23,6 +24,9 @@ class CustomUser(AbstractUser):
     )
 
     email = models.EmailField('email address', blank=False)
+
+    def get_api_url(self, request=None):
+        return api_reverse(request=request, viewname='user-rud', kwargs={'pk': self.pk})
 
 
 class Profile(models.Model):

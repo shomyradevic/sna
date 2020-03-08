@@ -2,6 +2,7 @@ from django.db import models
 from PIL import Image
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
+from rest_framework.reverse import reverse as api_reverse
 
 
 class Post(models.Model):
@@ -10,6 +11,9 @@ class Post(models.Model):
     content = models.TextField(blank=True)
     image = models.ImageField(upload_to='uploaded', blank=True, null=True)
     likes = models.ManyToManyField(to=get_user_model(), blank=True, related_name='post_likes')
+
+    def get_api_url(self, request=None):
+        return api_reverse(request=request, viewname='post-rud', kwargs={'pk': self.pk})
 
     def get_absolute_url(self):
         return reverse(viewname='homepage')
@@ -49,4 +53,8 @@ class Post(models.Model):
         self.save()
 
     def __str__(self):
+        """s = ''
+        s += 'Author: ' + str(self.author) + '\nCreated_time: ' + str(self.created_time)
+        s += '\nContent: ' + str(self.content) + '\nImage: ' + str(self.image)
+        return s"""
         return self.author.username + "'s post"
