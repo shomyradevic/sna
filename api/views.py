@@ -1,15 +1,45 @@
 from rest_framework import generics, mixins
 from posts.models import Post
 from users.models import CustomUser, Profile
-from .serializers import PostSerializer, CustomUserSerializer, RegistrationSerializer
+from .serializers import PostSerializer, CustomUserSerializer, RegistrationSerializer, ProfileSerializer
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from .permissions import IsAdminOrOwner
-from .help import log
 
 custom_perm = IsAdminOrOwner()
+
+
+class ProfileListView(generics.ListAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        return Profile.objects.all()
+
+
+class ProfileRUDView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = (permissions.AllowAny, )
+    permission_error_message = custom_perm.generate_error_message('profile')
+
+    def put(self, request, *args, **kwargs):
+        if custom_perm.has_object_permission(request=request, obj=self.get_object().user):
+            return self.update(request=request, args=args, kwargs=kwargs)
+        return Response(data=self.permission_error_message, status=status.HTTP_403_FORBIDDEN)
+
+    def patch(self, request, *args, **kwargs):
+        if custom_perm.has_object_permission(request=request, obj=self.get_object().user):
+            return self.partial_update(request=request, args=args, kwargs=kwargs)
+        return Response(data=self.permission_error_message, status=status.HTTP_403_FORBIDDEN)
+
+    def delete(self, request, *args, **kwargs):
+        pass
+
+    def get_queryset(self):
+        return Profile.objects.all()
+
 
 @api_view(['POST', ])
 def rest_register(request):
@@ -113,6 +143,27 @@ class PostRUDView(generics.RetrieveUpdateDestroyAPIView):
 class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = (permissions.AllowAny, )
+    permission_error_message = custom_perm.generate_error_message('user')
+
+    def put(self, request, *args, **kwargs):
+        if custom_perm.has_object_permission(request=request, obj=self.get_object()):
+            return self.update(request=request, args=args, kwargs=kwargs)
+        return Response(data=self.permission_error_message, status=status.HTTP_403_FORBIDDEN)
+
+    def patch(self, request, *args, **kwargs):
+        if custom_perm.has_object_permission(request=request, obj=self.get_object()):
+            return self.partial_update(request=request, args=args, kwargs=kwargs)
+        return Response(data=self.permission_error_message, status=status.HTTP_403_FORBIDDEN)
+
+    def delete(self, request, *args, **kwargs):
+        if custom_perm.has_object_permission(request=request, obj=self.get_object()):
+            return self.destroy(request=request, args=args, kwargs=kwargs)
+        return Response(data=self.permission_error_message, status=status.HTTP_403_FORBIDDEN)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance=instance)
+        return Response(data={'message': 'Post successfully deleted.'}, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         return CustomUser.objects.all()

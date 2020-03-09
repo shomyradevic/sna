@@ -4,6 +4,25 @@ from users.models import CustomUser, Profile
 from api.help import log
 
 
+class ProfileSerializer(serializers.ModelSerializer):
+    profile_url = serializers.SerializerMethodField(read_only=True)
+    user_url = serializers.SerializerMethodField(read_only=True)
+
+    read_only_fields = ('profile_url', )
+
+    class Meta:
+        model = Profile
+        fields = ('profile_url', 'user_url', 'image')
+
+    def get_profile_url(self, obj):
+        request = self.context.get('request')
+        return obj.get_api_url(request=request)
+
+    def get_user_url(self, obj):
+        request = self.context.get('request')
+        return obj.user.get_api_url(request=request)
+
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(min_length=8, style={'input_type': 'password'}, write_only=True)
 
@@ -33,19 +52,6 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('post_url', 'author', 'created_time', 'content', 'image', 'likes')
 
-    """def save(self, **kwargs):
-        image, content = '', ''
-        if 'image' in self.validated_data.keys():
-            image = self.validated_data['image']
-        if 'content' in self.validated_data.keys():
-            content = self.validated_data['content']
-        
-        # We must handle case when user uploads both image and content.
-        # What takes priority? Image like on website?
-        #user.save()
-        #return user"""
-
-
     def get_post_url(self, obj):
         request = self.context.get('request')
         return obj.get_api_url(request=request)
@@ -65,6 +71,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     is_staff = serializers.SerializerMethodField(read_only=True)
 
     read_only_fields = ('user_url', 'username', 'first_name', 'last_name', 'email', 'is_staff', 'date_joined')
+
     class Meta:
         model = CustomUser
         fields = ('user_url', 'username', 'first_name', 'last_name', 'email', 'date_joined', 'is_staff')

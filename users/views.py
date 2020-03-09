@@ -10,7 +10,6 @@ from django.views.generic import DetailView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from users.forms import UserRegisterForm
-from rest_framework.viewsets import ModelViewSet
 
 
 def register_view(request):

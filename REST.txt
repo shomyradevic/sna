@@ -126,11 +126,47 @@ We have modified:
                 -IsAdminOrOwner permission not tested.
             ),
             DELETE(
-                -Works.
-                -IsAdminOrOwner permission Works.
+                -Deleting.
+                -IsAdminOrOwner permission.
             ).
 
-    -snanetwork.rs/api/users/
+9. Mart
+
+    -snanetwork.rs/api/users/ [GET] WORKS
     -snanetwork.rs/api/users/<id>/
-    -snanetwork.rs/api/profiles/
+        WORKS:
+            PUT/UPDATE VALIDATION(
+                Username >= 5 chars,
+                email must be valid.
+                is_staff is read_only
+            )
+            GET,
+            PUT(
+                IsAdminOrOwner,
+                Updating.
+            ),
+            PATCH(
+                IsAdminOrOwner,
+                Updating.
+            ),
+            DELETE(
+                IsAdminOrOwner,
+                Deleting
+            )
+    -snanetwork.rs/api/profiles/ [GET] WORKS
     -snanetwork.rs/api/profiles/<id>/
+        WORKS:
+            PUT/UPDATE VALIDATION(
+                user_url & profile_url are read_only
+                client can edit only image.
+            ),
+            GET,
+            PUT(
+                IsAdminOrOwner,
+                Updating,
+            ),
+            PATCH(
+                IsAdminOrOwner,
+                Updating,
+            )
+

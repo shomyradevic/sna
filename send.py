@@ -3,15 +3,15 @@ from datetime import datetime
 
 
 refresh = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4MzY2MjEwOCwianRpIjoiMzE4OGZjMDg2YTllNDM1YzlmMmE2MmNhMjcwNzRhMDUiLCJ1c2VyX2lkIjo0NX0.i0FXlmo_DK9xaNwRMDzLld40L64Woad3qDnxMMnxgwQ'
-access = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzNjg2NjcyLCJqdGkiOiIxZjhkZWFhNDk2ZTQ0ZTdmYWI5Y2NlMjUzYjQ1NmVjYyIsInVzZXJfaWQiOjEwfQ.ON2mUZ67nHZaYSp1paOCS240rlZOjLaZR6z_jW2mTew'
+access = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzNzUzMzE1LCJqdGkiOiIxM2E0ZTBmZTlhODE0ODg5OTlkMTZiOTA4Y2MwMjU1YiIsInVzZXJfaWQiOjQ1fQ.0X1Oz-QCEb0z5QsVEMZomhsB30mmNK-8n6lMQf9U5Pc'
 
 
 def register_req():
     data = {
-        'username': 'TestUser',
-        'email': 'test@gmail.com',
-        'password': 'test1234',
-        'password2': 'test1234'
+        'username': 'Delete',
+        'email': 'Delete@gmail.com',
+        'password': 'Deletepwd',
+        'password2': 'Deletepwd'
     }
     url = 'http://localhost:8000/api/register/'
     response = post(url=url, data=data)
@@ -21,7 +21,7 @@ def register_req():
 
 def login_req():
     url = 'http://localhost:8000/api/token/'
-    data = {'username': 'JulesWinfield94', 'password': 'snpassword'}
+    data = {'username': 'TestUser', 'password': 'test1234'}
     response = post(url=url, data=data)
     print(response.status_code)
     print(response.text)
@@ -100,10 +100,10 @@ def put_text_req():
 
 def patch_req():
     global access
-    data = {'content': 'Patched at: ' + str(datetime.now())}
+    data = {'username': 'JulesWinfield94', 'is_staff': True, 'email': 'JulesW@gmail.com'}
     try:
         r = patch(
-            url='http://localhost:8000/api/posts/127/',
+            url='http://localhost:8000/api/users/10/',
             data=data,
             headers={'Authorization': 'Bearer ' + access}
         )
@@ -163,7 +163,7 @@ def get_req():
     global access
     try:
         r = get(
-            url='http://localhost:8000/api/posts/'
+            url='http://localhost:8000/api/profiles/45/'
         )
         print(r.status_code)
         print(r.text)
@@ -175,7 +175,7 @@ def delete_user():
     global access
     try:
         r = delete(
-            url='http://localhost:8000/api/users/16/',
+            url='http://localhost:8000/api/users/47/',
             headers={'Authorization': 'Bearer ' + access},
         )
         print(r.status_code)
@@ -186,10 +186,9 @@ def delete_user():
 
 def put_profile_req():
     global access
-    url = 'http://localhost:8000/api/profiles/17/'
-    image_path = 'C:\\Users\\Milos\\Desktop\\asus.jpg'
-    with open(image_path, 'rb') as descriptor:
-        files = {'image': (image_path, descriptor, 'multipart/form-data')}
+    url = 'http://localhost:8000/api/profiles/45/'
+    with open(file='C:\\Users\\Milos\\Desktop\\download.png', mode='rb') as descriptor:
+        files = {'image': descriptor}
         response = put(
             url=url,
             files=files,
@@ -202,10 +201,10 @@ def put_profile_req():
 
 def patch_profile_req():
     global access
-    url = 'http://localhost:8000/api/profiles/17/'
-    image_path = 'C:\\Users\\Milos\\Desktop\\asus.jpg'
+    url = 'http://localhost:8000/api/profiles/45/'
+    image_path = 'C:\\Users\\Milos\\Desktop\\download.png'
     with open(file=image_path, mode='rb') as image_desc:
-        files = {'image': (image_path, image_desc, 'multipart/form-data')}
+        files = {'image': image_desc}
         r = patch(
             url=url,
             files=files,
@@ -216,17 +215,40 @@ def patch_profile_req():
         print(r.text)
 
 
+def put_user_req():
+    global access
+    url = 'http://localhost:8000/api/users/10/'
+    data = {
+        'first_name': 'Jules',
+        'last_name': 'Winfield',
+        'username': 'JulesWinfield94',
+        'email': 'JulesW@gmail.com'
+    }
+    try:
+        r = put(
+            url=url,
+            data=data,
+            headers={'Authorization': 'Bearer ' + access}
+        )
+        print(r.status_code)
+        print(r.text)
+    except RequestConnectionError as rce:
+        print('ERROR', rce)
+
+
 #login_req()
 #put_text_req()
 #patch_req()
 #register_req()
 #try_create_post()
-get_req()
+#get_req()
 #delete_post()
 #put_profile_req()
-#patch_profile_req()#
+#patch_profile_req()
 #refresh_req()
 #put_image_req()
 #create_image_post_req()
 #patch_req()
 #patch_image_req()
+#put_user_req()
+#delete_user()

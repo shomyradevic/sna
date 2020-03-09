@@ -33,6 +33,9 @@ class Profile(models.Model):
     user = models.OneToOneField(to=get_user_model(), primary_key=True, on_delete=models.CASCADE)
     image = models.ImageField(default='profile_pics/profile.png', upload_to='profile_pics')
 
+    def get_api_url(self, request=None):
+        return api_reverse(request=request, viewname='profile-rud', kwargs={'pk': self.pk})
+
     def get_absolute_url(self):
         return reverse(viewname='profile', kwargs=self.pk)
 
