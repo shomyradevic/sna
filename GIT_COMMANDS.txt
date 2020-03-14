@@ -23,7 +23,13 @@ git reset path/to/file
 git checkout path/to/file
 
 
+-git pull origin master
+	*Works only for NEW files, that are uploaded to the remote repo*
+	*DOES NOT OVERRIDE EXISTING FILES ON LOCAL REPO!!!*
+	 
 
-
-COPY GIT REPO:
-git clone https://github.com/git/repo.git
+-When we have both new files and existing files that are 
+	modified and are valueable for us, we should use:
+		-git fetch --all
+		-git reset --hard origin/master
+-Those two commands basically cut-paste remote repo to local repo.
