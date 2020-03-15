@@ -236,7 +236,17 @@ def put_user_req():
         print('ERROR', rce)
 
 
-#login_req()
+def api_root_request():
+    url = 'http://localhost:8000/api/'
+    try:
+        r = get(url=url)
+        print(r.status_code)
+        print(r.text)
+    except RequestConnectionError as rce:
+        print('ERROR', rce)
+
+
+login_req()
 #put_text_req()
 #patch_req()
 #register_req()
@@ -252,3 +262,4 @@ def put_user_req():
 #patch_image_req()
 #put_user_req()
 #delete_user()
+#api_root_request()

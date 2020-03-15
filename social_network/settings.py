@@ -15,9 +15,11 @@ import json
 from datetime import timedelta
 
 
-with open('/etc/config.json', 'r') as f:
-    file = json.load(f)
-    f.close()
+file = {'secret_key': '5c8s7d62'}
+
+#with open('/etc/config.json', 'r') as f:
+    #file = json.load(f)
+    #f.close()
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -34,7 +36,7 @@ SECRET_KEY = file['secret_key']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.snanetwork.rs', 'snanetwork.rs', '94.127.4.217']
+ALLOWED_HOSTS = ['www.snanetwork.rs', 'snanetwork.rs', '94.127.4.217', 'localhost']
 
 
 # Application definition
@@ -137,10 +139,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = 'login'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication', )
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication', ),
 }
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440),
     'REFRESH_TOKEN_LIFETIME': timedelta(minutes=1440)
 }
+
+if not DEBUG:
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = ('rest_framework.renderers.JSONRenderer',)

@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from .permissions import IsAdminOrOwner
+from rest_framework.views import APIView
 
 custom_perm = IsAdminOrOwner()
 
@@ -175,3 +176,17 @@ class UserListView(generics.ListAPIView):
 
     def get_queryset(self):
         return CustomUser.objects.all()
+
+
+class DocsView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        apidocs = {
+            'register': request.build_absolute_uri('register/'),
+            'login': request.build_absolute_uri('token/'),
+            'token-refresh': request.build_absolute_uri('token/refresh'),
+            'posts': request.build_absolute_uri('posts/'),
+            'users': request.build_absolute_uri('users/'),
+            'profiles': request.build_absolute_uri('profiles/')
+        }
+        return Response(data=apidocs)

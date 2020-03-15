@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     PostLCView,
     PostRUDView,
@@ -6,7 +6,8 @@ from .views import (
     UserListView,
     rest_register,
     ProfileRUDView,
-    ProfileListView
+    ProfileListView,
+    DocsView
 )
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
@@ -20,5 +21,6 @@ urlpatterns = [
     path('users/', UserListView.as_view(), name='user-list'),
     path('users/<int:pk>/', UserRUDView.as_view(), name='user-rud'),
     path('profiles/', ProfileListView.as_view(), name='profile-list'),
-    path('profiles/<int:pk>/', ProfileRUDView.as_view(), name='profile-rud')
+    path('profiles/<int:pk>/', ProfileRUDView.as_view(), name='profile-rud'),
+    path('', DocsView.as_view(), name='docs')
 ]
