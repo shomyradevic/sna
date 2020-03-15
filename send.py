@@ -2,26 +2,26 @@ from requests import post, get, put, patch, delete, ConnectionError as RequestCo
 from datetime import datetime
 
 
-refresh = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4MzY2MjEwOCwianRpIjoiMzE4OGZjMDg2YTllNDM1YzlmMmE2MmNhMjcwNzRhMDUiLCJ1c2VyX2lkIjo0NX0.i0FXlmo_DK9xaNwRMDzLld40L64Woad3qDnxMMnxgwQ'
-access = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTgzNzUzMzE1LCJqdGkiOiIxM2E0ZTBmZTlhODE0ODg5OTlkMTZiOTA4Y2MwMjU1YiIsInVzZXJfaWQiOjQ1fQ.0X1Oz-QCEb0z5QsVEMZomhsB30mmNK-8n6lMQf9U5Pc'
+refresh = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTU4NDM1NTQ3OSwianRpIjoiOWY1YTU4ZDEyMDdkNGEzMWFkYjg3NTk3YjUzZWE5NjMiLCJ1c2VyX2lkIjoxMH0.NQqa6YlWAIqTT4wwDRQ0RMsk82zG8KM_lHunqhiekjE'
+access = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTg0MzU1NjAxLCJqdGkiOiJmYzFkMzBhMzdhNjc0NzMwYTFhOGRlZWExZGMxNDY4ZiIsInVzZXJfaWQiOjI0fQ.sekBLbq9fQStGABTbk9vR_Q1U_Xqv0u1qWnSvvaTmhE'
 
 
 def register_req():
     data = {
-        'username': 'Delete',
-        'email': 'Delete@gmail.com',
-        'password': 'Deletepwd',
-        'password2': 'Deletepwd'
+        'username': 'TestUser',
+        'email': 'Test@gmail.com',
+        'password': 'test1234',
+        'password2': 'test1234'
     }
-    url = 'http://localhost:8000/api/register/'
+    url = 'http://snanetwork.rs/api/register/'
     response = post(url=url, data=data)
     print(response.status_code)
     print(response.text)
 
 
 def login_req():
-    url = 'http://localhost:8000/api/token/'
-    data = {'username': 'TestUser', 'password': 'test1234'}
+    url = 'http://snanetwork.rs/api/token/'
+    data = {'username': 'MikeSNA', 'password': 'z20letopel'}
     response = post(url=url, data=data)
     print(response.status_code)
     print(response.text)
@@ -40,7 +40,7 @@ def after_req():
 def refresh_req():
     global refresh
     try:
-        r = post(url='http://localhost:8000/api/token/refresh/', data={'refresh': refresh})
+        r = post(url='http://snanetwork.rs/api/token/refresh/', data={'refresh': refresh})
         print(r.status_code)
         print(r.text)
     except RequestConnectionError as rce:
@@ -66,13 +66,13 @@ def put_image_req():
 
 def create_image_post_req():
     global access
-    image_path = 'C:\\Users\\Korisnik\\Desktop\\laptop.jpg'
+    image_path = 'C:\\Users\\Korisnik\\Desktop\\pdzi.jpg'
     files = {'image': ''}
     with open(file=image_path, mode='rb') as descriptor:
         files['image'] = (image_path, descriptor, 'multipart/form-data')
         try:
             r = post(
-                url='http://localhost:8000/api/posts/',
+                url='http://snanetwork.rs/api/posts/',
                 files=files,
                 headers={'Authorization': 'Bearer ' + access}
             )
@@ -134,7 +134,7 @@ def delete_post():
     global access
     try:
         r = delete(
-            url='http://localhost:8000/api/posts/130/',
+            url='http://snanetwork.rs/api/posts/137/',
             headers={'Authorization': 'Bearer ' + access}
         )
         print(r.status_code)
@@ -147,7 +147,7 @@ def try_create_post():
     global access
     try:
         r = post(
-            url='http://localhost:8000/api/posts/',
+            url='http://snanetwork.rs/api/posts/',
             data={
                 'content': 'Post u ' + str(datetime.now())
             },
@@ -163,7 +163,7 @@ def get_req():
     global access
     try:
         r = get(
-            url='http://localhost:8000/api/profiles/45/'
+            url='http://snanetwork.rs/api/users/'
         )
         print(r.status_code)
         print(r.text)
@@ -175,7 +175,7 @@ def delete_user():
     global access
     try:
         r = delete(
-            url='http://localhost:8000/api/users/47/',
+            url='http://snanetwork.rs/api/users/49/',
             headers={'Authorization': 'Bearer ' + access},
         )
         print(r.status_code)
@@ -186,8 +186,8 @@ def delete_user():
 
 def put_profile_req():
     global access
-    url = 'http://localhost:8000/api/profiles/45/'
-    with open(file='C:\\Users\\Milos\\Desktop\\download.png', mode='rb') as descriptor:
+    url = 'http://snanetwork.rs/api/profiles/48/'
+    with open(file='C:\\Users\\Korisnik\\Desktop\\22.jpg', mode='rb') as descriptor:
         files = {'image': descriptor}
         response = put(
             url=url,
@@ -201,8 +201,8 @@ def put_profile_req():
 
 def patch_profile_req():
     global access
-    url = 'http://localhost:8000/api/profiles/45/'
-    image_path = 'C:\\Users\\Milos\\Desktop\\download.png'
+    url = 'http://snanetwork.rs/api/profiles/48/'
+    image_path = 'C:\\Users\\Korisnik\\Desktop\\pdzi.jpg'
     with open(file=image_path, mode='rb') as image_desc:
         files = {'image': image_desc}
         r = patch(
@@ -217,7 +217,7 @@ def patch_profile_req():
 
 def put_user_req():
     global access
-    url = 'http://localhost:8000/api/users/10/'
+    url = 'http://snanetwork.rs/api/users/10/'
     data = {
         'first_name': 'Jules',
         'last_name': 'Winfield',
@@ -237,7 +237,7 @@ def put_user_req():
 
 
 def api_root_request():
-    url = 'http://localhost:8000/api/'
+    url = 'http://snanetwork.rs/api/'
     try:
         r = get(url=url)
         print(r.status_code)
@@ -246,20 +246,34 @@ def api_root_request():
         print('ERROR', rce)
 
 
-login_req()
+def try_delete_profile():
+    url = 'http://snanetwork.rs/api/profiles/49/'
+    try:
+        r = delete(
+            url=url,
+            headers={'Authorization': 'Bearer ' + access}
+        )
+        print(r.status_code)
+        print(r.text)
+    except RequestConnectionError as rce:
+        print('ERROR', rce)
+
+
+#login_req() #works
 #put_text_req()
 #patch_req()
-#register_req()
+#register_req() works
 #try_create_post()
-#get_req()
-#delete_post()
-#put_profile_req()
-#patch_profile_req()
+#get_req() works
+#delete_post() #works
+#put_profile_req() works
+#patch_profile_req() works
 #refresh_req()
-#put_image_req()
-#create_image_post_req()
-#patch_req()
-#patch_image_req()
+#put_image_req() works
+#create_image_post_req() works
+#patch_req() works
+#patch_image_req() works
 #put_user_req()
-#delete_user()
-#api_root_request()
+#delete_user() #works
+#api_root_request() works
+#try_delete_profile()

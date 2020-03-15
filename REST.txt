@@ -34,6 +34,7 @@ We should watch 1 hour yt video for django rest framework!
 
 API-ENDPOINTS:
 
+    -snanetwork.rs/api/
     -snanetwork.rs/api/register/
     -snanetwork.rs/api/token/
     -snanetwork.rs/api/token/refresh
@@ -171,7 +172,6 @@ We have modified:
             )
 
 
-
+15. Mar
 - API root view created.
 - Endpoints created.
--

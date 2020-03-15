@@ -20,7 +20,7 @@ class ProfileListView(generics.ListAPIView):
         return Profile.objects.all()
 
 
-class ProfileRUDView(generics.RetrieveUpdateDestroyAPIView):
+class ProfileRUDView(generics.RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = (permissions.AllowAny, )
     permission_error_message = custom_perm.generate_error_message('profile')
@@ -34,9 +34,6 @@ class ProfileRUDView(generics.RetrieveUpdateDestroyAPIView):
         if custom_perm.has_object_permission(request=request, obj=self.get_object().user):
             return self.partial_update(request=request, args=args, kwargs=kwargs)
         return Response(data=self.permission_error_message, status=status.HTTP_403_FORBIDDEN)
-
-    def delete(self, request, *args, **kwargs):
-        pass
 
     def get_queryset(self):
         return Profile.objects.all()
@@ -164,7 +161,7 @@ class UserRUDView(generics.RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         self.perform_destroy(instance=instance)
-        return Response(data={'message': 'Post successfully deleted.'}, status=status.HTTP_200_OK)
+        return Response(data={'message': 'Account successfully deleted.'}, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         return CustomUser.objects.all()
