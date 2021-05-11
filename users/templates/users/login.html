@@ -8,6 +8,9 @@
         {{ login_form|crispy }}
         <button class="btn btn-outline-info" type="submit">Login</button>
         <a class="btn btn-secondary" href="{% url 'homepage' %}">Cancel</a>
+        <small class="text-muted ml-2">
+            <a href="{% url 'password-reset' %}">Forgot Password?</a>
+        </small>
         <small class="account-message"><a href="{% url 'register' %}" style="float: right;">Want an account?</a></small>
     </form>
 </div>
