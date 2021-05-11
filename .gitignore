@@ -1,3 +1,9 @@
+# directories
 media/
 venv/
+*.pyc
+
+# files
 db.sqlite3
+REST.txt
+send.py
